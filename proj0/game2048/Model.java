@@ -156,7 +156,6 @@ public class Model extends Observable {
         // TODO: Fill in this function.
         for (int i=0;i<b.size();i=i+1){
             for (int j=0;j<b.size();j=j+1){
-                //System.out.println("i:"+i+"  j:"+j+"  value:"+b.tile(i, j).value());
                 if (b.tile(i,j)!=null && b.tile(i, j).value()==Model.MAX_PIECE) return true;
             }
         }
@@ -171,6 +170,21 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        if (Model.emptySpaceExists(b)) return true;
+        for (int i=1;i<b.size()-1;i=i+1){
+            for (int j=1;j<b.size()-1;j=j+1){
+                int temp=b.tile(i,j).value();
+                if (b.tile(i-1,j).value()==temp || b.tile(i+1,j).value()==temp || b.tile(i,j-1).value()==temp || b.tile(i,j+1).value()==temp) return true;
+            }
+        }
+        int lu=b.tile(0,0).value();
+        int ru=b.tile(0,b.size()-1).value();
+        int ld=b.tile(b.size()-1,0).value();
+        int rd=b.tile(b.size()-1,b.size()-1).value();
+        if (b.tile(0,1).value()==lu || b.tile(1,0).value()==lu) return true;
+        if (b.tile(0,b.size()-2).value()==ru || b.tile(1,b.size()-1).value()==ru) return true;
+        if (b.tile(b.size()-2,0).value()==ld || b.tile(b.size()-1,1).value()==ld) return true;
+        if (b.tile(b.size()-1,b.size()-2).value()==rd || b.tile(b.size()-2,b.size()-1).value()==rd) return true;
         return false;
     }
 
