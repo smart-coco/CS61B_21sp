@@ -144,14 +144,13 @@ public class Model extends Observable {
                         //System.out.println("changed score:"+score);
                     }else {
                         //情况4：p2所指与p1不同
-                        break;
                     }
                 } 
             }       
             p1--;
             if (p1==0) break;
         }
-        //调试
+       //调试
         //System.out.println("完成后");
         //for (int i=b.size()-1;i>=0;i--) {
             //if (b.tile(col,i)==null) System.out.println(0);
