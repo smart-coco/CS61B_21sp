@@ -106,6 +106,60 @@ public class Model extends Observable {
      *    value, then the leading two tiles in the direction of motion merge,
      *    and the trailing tile does not.
      * */
+    //col为列号，处理col列
+    public static int helper(int col,Board b){
+        //双指针，更改标记初始化
+        int p1=b.size()-1,p2;
+        //score记录返回结果-1为无变化，其余为分数
+        int score=-1;
+        //调试
+        //System.out.println("次数："+col);
+        //for (int i=b.size()-1;i>=0;i--) {
+            //if (b.tile(col,i)==null) System.out.println(0);
+            //else System.out.println(b.tile(col,i).value());
+        //}
+
+        while (true){
+            //找到第一个不为空的p2
+            p2=p1-1;
+            while (p2>=0 && b.tile(col,p2)==null){
+                p2-=1;
+            } 
+            //System.out.println("p1:"+p1+" p2:"+p2);
+            //情况1：p2越界
+            if (p2==-1) break;
+            else {
+                //情况2:p1所指为空
+                if (b.tile(col,p1)==null) {
+                    b.move(col,p1,b.tile(col,p2));  
+                    if (score==-1) score=0;
+                    p1++;
+                }
+                else{
+                    //情况3：p2所指与p1相同
+                    if (b.tile(col,p1).value()==b.tile(col,p2).value()) {
+                        b.move(col,p1,b.tile(col,p2));  
+                        if (score==-1) score=b.tile(col,p1).value();
+                        else score+=b.tile(col,p1).value();
+                        //System.out.println("changed score:"+score);
+                    }else {
+                        //情况4：p2所指与p1不同
+                        break;
+                    }
+                } 
+            }       
+            p1--;
+            if (p1==0) break;
+        }
+        //调试
+        //System.out.println("完成后");
+        //for (int i=b.size()-1;i>=0;i--) {
+            //if (b.tile(col,i)==null) System.out.println(0);
+            //else System.out.println(b.tile(col,i).value());
+        //}
+        //System.out.println("score:"+score);
+        return score;
+    }
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
@@ -113,6 +167,15 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        board.setViewingPerspective(side);
+        for (int i=0;i<board.size();i++) {
+            int temp=Model.helper(i, board);
+            if (temp!=-1) {
+                changed=true;
+                score+=temp;
+            }
+        }
+        board.setViewingPerspective(Side.NORTH);
 
         checkGameOver();
         if (changed) {
