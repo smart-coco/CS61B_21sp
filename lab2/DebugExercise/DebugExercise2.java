@@ -1,4 +1,4 @@
-
+package DebugExercise;
 
 /**
  * Exercise to showcase the step over button.
