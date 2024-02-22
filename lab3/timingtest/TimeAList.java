@@ -1,5 +1,4 @@
 package timingtest;
-import edu.neu.ccs.gui.AlertEvent;
 import edu.princeton.cs.algs4.Stopwatch;
 
 /**
