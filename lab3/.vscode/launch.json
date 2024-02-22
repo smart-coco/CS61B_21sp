@@ -1,0 +1,42 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "SLList",
+            "request": "launch",
+            "mainClass": "timingtest.SLList",
+            "projectName": "lab3"
+        },
+        {
+            "type": "java",
+            "name": "StopwatchDemo",
+            "request": "launch",
+            "mainClass": "timingtest.StopwatchDemo",
+            "projectName": "lab3"
+        },
+        {
+            "type": "java",
+            "name": "TimeAList",
+            "request": "launch",
+            "mainClass": "timingtest.TimeAList",
+            "projectName": "lab3"
+        },
+        {
+            "type": "java",
+            "name": "TimeSLList",
+            "request": "launch",
+            "mainClass": "timingtest.TimeSLList",
+            "projectName": "lab3"
+        }
+    ]
+}
