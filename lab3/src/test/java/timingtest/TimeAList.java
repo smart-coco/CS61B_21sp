@@ -23,7 +23,7 @@ public class TimeAList {
 
     public static void timeAListConstruction() {
         // TODO: YOUR CODE HERE
-        int n=15,count=1000,opt;
+        int n=8,count=1000,opt;
         AList<Integer> N=new AList<>();
         AList<Double> time=new AList<>();
         AList<Integer> opt_array=new AList<>();
