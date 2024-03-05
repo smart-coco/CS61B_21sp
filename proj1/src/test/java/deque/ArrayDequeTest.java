@@ -103,6 +103,21 @@ public class ArrayDequeTest {
         assertEquals("Should return null when removeLast is called on an empty Deque,", null, lld1.removeLast());
 
     }
+    @Test
+    /* check if null is return when removing from an empty LinkedListDeque. */
+    public void tenTest() {
+
+        //System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
+        ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+
+        for (int i=0;i<10;i++) {
+            lld1.addLast(i);
+        }
+        lld1.printDeque();
+        System.out.println(lld1.removeLast());
+        System.out.println(lld1.removeFirst());
+        lld1.printDeque();
+    }
 
     @Test
     /* Add large number of elements to deque; check if order is correct. */

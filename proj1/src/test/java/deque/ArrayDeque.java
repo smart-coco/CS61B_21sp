@@ -24,7 +24,7 @@ public class ArrayDeque<T> {
             System.arraycopy(array, 0, a, 0, length);
         } else {
             System.arraycopy(array, begin, a, begin, length-begin);
-            System.arraycopy(array, 0, a, length, end-1);
+            System.arraycopy(array, 0, a, length, end);
             end=length+end;
         }
         length*=2;
@@ -93,7 +93,7 @@ public class ArrayDeque<T> {
     public T removeLast() {
         if (size()==0) return null;
         if (size()<=(length/2)) shrink();
-        end=(end-1)<0?length-1:length-1;
+        end=(end-1)<0?length-1:end-1;
         T ret=array[end];
         return ret;
     }   
