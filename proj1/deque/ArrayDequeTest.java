@@ -111,12 +111,14 @@ public class ArrayDequeTest {
         ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
 
         for (int i=0;i<10;i++) {
-            lld1.addLast(i);
+            lld1.addFirst(i);
         }
         lld1.printDeque();
+        System.out.println(lld1.size());
         System.out.println(lld1.removeLast());
         System.out.println(lld1.removeFirst());
         lld1.printDeque();
+        System.out.println(lld1.size());
     }
 
     @Test
