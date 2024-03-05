@@ -55,7 +55,7 @@ public class ArrayDeque<T> {
         if (this.size()==(length-1)) {
             resize();
         }
-        begin=(begin-1)<=0?length-1:begin-1;
+        begin=(begin-1)<0?length-1:begin-1;
         array[begin]=item;
     }
 
