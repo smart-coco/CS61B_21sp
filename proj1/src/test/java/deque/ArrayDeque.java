@@ -13,9 +13,21 @@ public class ArrayDeque<T> {
         begin=0;
         end=0;
     }
-    //help function length()
+    //help function size()
     public int size() {
         return (end-begin+length)%length;
+    }
+    //help function length()
+    public int length() {
+        return length;
+    }
+    //help function begin()
+    public int begin() {
+        return begin;
+    }
+    //help function end()
+    public int end() {
+        return end;
     }
     //help function resize
     public void resize() {
@@ -84,7 +96,7 @@ public class ArrayDeque<T> {
 
     public T removeFirst() {
         if (size()==0) return null;
-        if (size()<=(length/2)) shrink();
+        if (size()<=(length/2-1) && length>8) shrink();
         T ret=array[begin];
         begin=(begin+1)>=length?0:begin+1;
         return ret;
@@ -92,7 +104,7 @@ public class ArrayDeque<T> {
 
     public T removeLast() {
         if (size()==0) return null;
-        if (size()<=(length/2)) shrink();
+        if (size()<=(length/2-1) && length>8) shrink();
         end=(end-1)<0?length-1:end-1;
         T ret=array[end];
         return ret;

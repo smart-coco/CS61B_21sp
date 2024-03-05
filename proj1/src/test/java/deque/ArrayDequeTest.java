@@ -2,6 +2,7 @@ package deque;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import edu.princeton.cs.algs4.StdRandom;
 
 public class ArrayDequeTest {
     @Test
@@ -121,6 +122,48 @@ public class ArrayDequeTest {
         System.out.println(lld1.size());
     }
 
+    @Test
+    public void emptyTest() {
+
+        //System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
+        ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+
+        int N=10000;
+        int l=0;
+        for (int i=0;i<N;i++) {
+            int op=StdRandom.uniform(0, 4);
+            if (op==0) {
+                //addFirst
+                lld1.addFirst(1);
+                l+=1;
+                //System.out.println("addFirst");
+                //System.out.println(lld1.length());
+                //System.out.println(l);
+                //System.out.println(lld1.size());
+                //System.out.println(lld1.begin());
+                //System.out.println(lld1.end());
+                assertEquals("size() wrong", l, lld1.size());
+            }
+            if (op==1) {
+                //addLast
+                lld1.addLast(1);
+                l+=1;
+                assertEquals("size() wrong", l, lld1.size());
+            }
+            if (op==2 && lld1.size()!=0) {
+                //removefirst
+                lld1.removeFirst();
+                l-=1;
+                assertEquals("size() wrong", l, lld1.size());
+            }
+            if (op==3 && lld1.size()!=0) {
+                //removeLast
+                lld1.removeLast();
+                l-=1;
+                assertEquals("size() wrong", l, lld1.size());
+            }
+        }
+    }
     @Test
     /* Add large number of elements to deque; check if order is correct. */
     public void bigLLDequeTest() {
