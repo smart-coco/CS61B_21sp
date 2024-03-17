@@ -1,7 +1,9 @@
 package gh2;
 
+import deque.ArrayDeque;
+
 // TODO: uncomment the following import once you're ready to start this portion
-// import deque.Deque;
+import deque.Deque;
 // TODO: maybe more imports
 
 //Note: This file will not compile until you complete the Deque implementations
@@ -14,7 +16,11 @@ public class GuitarString {
 
     /* Buffer for storing sound data. */
     // TODO: uncomment the following line once you're ready to start this portion
-    // private Deque<Double> buffer;
+    private Deque<Double> buffer;
+    
+    public int size() {
+        return buffer.size();
+    }
 
     /* Create a guitar string of the given frequency.  */
     public GuitarString(double frequency) {
@@ -22,6 +28,11 @@ public class GuitarString {
         //       cast the result of this division operation into an int. For
         //       better accuracy, use the Math.round() function before casting.
         //       Your should initially fill your buffer array with zeros.
+        long l=Math.round(SR/frequency);
+        buffer=new ArrayDeque<Double>();
+        for (int i=0;i<l;i++) {
+            buffer.addFirst(0.0);
+        }
     }
 
 
@@ -31,10 +42,14 @@ public class GuitarString {
         //       between -0.5 and 0.5. You can get such a number by using:
         //       double r = Math.random() - 0.5;
         //
-        //       Make sure that your random numbers are different from each
+        //       Make sure that your random numbers are diffent from each
         //       other. This does not mean that you need to check that the numbers
         //       are different from each other. It means you should repeatedly call
         //       Math.random() - 0.5 to generate new random numbers for each array index.
+        for (int i=0;i<buffer.size();i++) {
+            buffer.removeFirst();
+            buffer.addLast(Math.random()-0.5);
+        }
     }
 
     /* Advance the simulation one time step by performing one iteration of
@@ -42,14 +57,19 @@ public class GuitarString {
      */
     public void tic() {
         // TODO: Dequeue the front sample and enqueue a new sample that is
-        //       the average of the two multiplied by the DECAY factor.
+        //       the average of the two remultiplied by the DECAY factor.
         //       **Do not call StdAudio.play().**
+        
+        buffer.addLast(DECAY*0.5*(buffer.removeFirst()+buffer.get(0)));
+        //double temp=buffer.get(0)+buffer.get(1);
+        //buffer.removeFirst();
+        //buffer.addLast(DECAY*temp/2);
     }
 
     /* Return the double at the front of the buffer. */
     public double sample() {
         // TODO: Return the correct thing.
-        return 0;
+        return buffer.get(0);
     }
 }
     // TODO: Remove all comments that say TODO when you're done.
