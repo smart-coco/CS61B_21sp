@@ -1,6 +1,6 @@
 package gh2;
 
-import deque.ArrayDeque;
+import deque.ArrayDeque2;
 
 // TODO: uncomment the following import once you're ready to start this portion
 import deque.Deque;
@@ -29,7 +29,7 @@ public class GuitarString {
         //       better accuracy, use the Math.round() function before casting.
         //       Your should initially fill your buffer array with zeros.
         long l=Math.round(SR/frequency);
-        buffer=new ArrayDeque<Double>();
+        buffer=new ArrayDeque2<Double>();
         for (int i=0;i<l;i++) {
             buffer.addFirst(0.0);
         }

@@ -13,7 +13,7 @@ public class ArrayDequeTest {
     public void addIsEmptySizeTest() {
 
         //System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        ArrayDeque<String> lld1 = new ArrayDeque<String>();
+        ArrayDeque2<String> lld1 = new ArrayDeque2<String>();
 
 		assertTrue("A newly initialized LLDeque should be empty", lld1.isEmpty());
 		lld1.addFirst("front");
@@ -39,7 +39,7 @@ public class ArrayDequeTest {
 
         //System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
 
-        ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+        ArrayDeque2<Integer> lld1 = new ArrayDeque2<Integer>();
 		// should be empty
 		assertTrue("lld1 should be empty upon initialization", lld1.isEmpty());
 
@@ -58,7 +58,7 @@ public class ArrayDequeTest {
     public void removeEmptyTest() {
 
         //System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+        ArrayDeque2<Integer> lld1 = new ArrayDeque2<Integer>();
         lld1.addFirst(3);
 
         lld1.removeLast();
@@ -78,9 +78,9 @@ public class ArrayDequeTest {
     /* Check if you can create LinkedListDeques with different parameterized types*/
     public void multipleParamTest() {
 
-        ArrayDeque<String> lld1 = new ArrayDeque<String>();
-        ArrayDeque<Double> lld2 = new ArrayDeque<Double>();
-        ArrayDeque<Boolean> lld3 = new ArrayDeque<Boolean>();
+        ArrayDeque2<String> lld1 = new ArrayDeque2<String>();
+        ArrayDeque2<Double> lld2 = new ArrayDeque2<Double>();
+        ArrayDeque2<Boolean> lld3 = new ArrayDeque2<Boolean>();
 
         lld1.addFirst("string");
         lld2.addFirst(3.14159);
@@ -96,7 +96,7 @@ public class ArrayDequeTest {
     public void emptyNullReturnTest() {
 
         //System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+        ArrayDeque2<Integer> lld1 = new ArrayDeque2<Integer>();
 
         boolean passed1 = false;
         boolean passed2 = false;
@@ -109,7 +109,7 @@ public class ArrayDequeTest {
     public void tenTest() {
 
         //System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+        ArrayDeque2<Integer> lld1 = new ArrayDeque2<Integer>();
 
         for (int i=0;i<10;i++) {
             lld1.addFirst(i);
@@ -126,7 +126,7 @@ public class ArrayDequeTest {
     public void emptyTest() {
 
         //System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+        ArrayDeque2<Integer> lld1 = new ArrayDeque2<Integer>();
 
         int N=10000;
         int l=0;
@@ -169,7 +169,7 @@ public class ArrayDequeTest {
     public void bigLLDequeTest() {
 
         //System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+        ArrayDeque2<Integer> lld1 = new ArrayDeque2<Integer>();
         for (int i = 0; i < 1000000; i++) {
             lld1.addLast(i);
         }
@@ -188,7 +188,7 @@ public class ArrayDequeTest {
     public void getindextest() {
 
         //System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+        ArrayDeque2<Integer> lld1 = new ArrayDeque2<Integer>();
         lld1.addFirst(3);
         lld1.addFirst(2);
         lld1.addFirst(1);

@@ -1,3 +1,4 @@
+package deque;
 /** second part of project1A.
  * deque implemented by array
  * @author FlyingPig
