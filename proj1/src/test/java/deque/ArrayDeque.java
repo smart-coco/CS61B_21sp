@@ -22,19 +22,19 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T>{
         return (end-begin+length)%length;
     }
     //help function length()
-    public int length() {
+    private int length() {
         return length;
     }
     //help function begin()
-    public int begin() {
+    private int begin() {
         return begin;
     }
     //help function end()
-    public int end() {
+    private int end() {
         return end;
     }
     //help function resize
-    public void resize() {
+    private void resize() {
         T[] a=(T[]) new Object[length*2];
         if (begin<=end) {
             System.arraycopy(array, 0, a, 0, length);
@@ -48,7 +48,7 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T>{
         return;
     }
     //help function shrink
-    public void shrink() {
+    private void shrink() {
         T[] a=(T[]) new Object[length/2];
         int l=size();
         if (begin<=end) {
@@ -108,7 +108,7 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T>{
     @Override
     public T removeLast() {
         if (size()==0) return null;
-        if (size()<=(length/2-1) && length>8) shrink();
+        if (size()<=(length/2-2) && length>8) shrink();
         end=(end-1)<0?length-1:end-1;
         T ret=array[end];
         return ret;
