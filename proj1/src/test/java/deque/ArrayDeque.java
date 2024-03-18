@@ -1,180 +1,142 @@
 package deque;
-/** second part of project1A.
- * deque implemented by array
- * @author FlyingPig
- */
-public class ArrayDeque<T> implements Deque<T> {
+import java.util.Iterator;
 
-    /** array to save data.*/
+public class ArrayDeque<T> implements Deque<T>,Iterable<T>{
     private T[] array;
-    /** size of the deque. */
-    private int size;
-
-    /** size of the array. */
     private int length;
+    private int begin;
+    private int end;
 
-    /** front index. */
-    private int front;
-
-    /** last index. */
-    private int last;
-
-    /** constructor for ArrayDeque. */
     public ArrayDeque() {
-        array = (T[]) new Object[8];
-        size = 0;
-        length = 8;
-        front = 4;
-        last = 4;
+        array=(T [])new Object[8];
+        //总空间大小
+        length=8;
+        begin=0;
+        end=0;
     }
-
-    /** decide if the deque is empty.
-     * @return true if the deque is empty, vice versa.
-     */
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    /** return the size of the deque. */
+    //help function size()
     @Override
     public int size() {
-        return size;
+        return (end-begin+length)%length;
     }
-
-    /** return the "index - 1".
-     * @param index index
-     */
-    private int minusOne(int index) {
-        if (index == 0) {
-            return length - 1;
+    //help function length()
+    public int length() {
+        return length;
+    }
+    //help function begin()
+    public int begin() {
+        return begin;
+    }
+    //help function end()
+    public int end() {
+        return end;
+    }
+    //help function resize
+    public void resize() {
+        T[] a=(T[]) new Object[length*2];
+        if (begin<=end) {
+            System.arraycopy(array, 0, a, 0, length);
+        } else {
+            System.arraycopy(array, begin, a, begin, length-begin);
+            System.arraycopy(array, 0, a, length, end);
+            end=length+end;
         }
-        return index - 1;
+        length*=2;
+        array=a;
+        return;
     }
-
-    /** return the "index + 1".
-     * @param index index
-     */
-    private int plusOne(int index, int module) {
-        index %= module;
-        if (index == module - 1) {
-            return 0;
+    //help function shrink
+    public void shrink() {
+        T[] a=(T[]) new Object[length/2];
+        int l=size();
+        if (begin<=end) {
+            System.arraycopy(array, begin, a, 0, size());
+            begin=0;
+            end=l;
+        } else {
+            System.arraycopy(array, begin, a, 0, length-begin);
+            System.arraycopy(array, 0, a, 0, end);
+            begin=0;
+            end=l;
         }
-        return index + 1;
+        length/=2;
+        array=a;
+        return;
     }
 
-    private void grow() {
-        T[] newArray = (T[]) new Object[length * 2];
-        int ptr1 = front;
-        int ptr2 = length;
-        while (ptr1 != last) {
-            newArray[ptr2] = array[ptr1];
-            ptr1 = plusOne(ptr1, length);
-            ptr2 = plusOne(ptr2, length * 2);
-        }
-        front = length;
-        last = ptr2;
-        array = newArray;
-        length *= 2;
-    }
-
-    private void shrink() {
-        T[] newArray = (T[]) new Object[length / 2];
-        int ptr1 = front;
-        int ptr2 = length / 4;
-        while (ptr1 != last) {
-            newArray[ptr2] = array[ptr1];
-            ptr1 = plusOne(ptr1, length);
-            ptr2 = plusOne(ptr2, length / 2);
-        }
-        front = length / 4;
-        last = ptr2;
-        array = newArray;
-        length /= 2;
-    }
-
-    /** add one item at the front of the deque.
-     * @param item the item we want to add
-     */
     @Override
     public void addFirst(T item) {
-        if (size == length - 1) {
-            grow();
+        //resize
+        if (this.size()==(length-1)) {
+            resize();
         }
-        front = minusOne(front);
-        array[front] = item;
-        size++;
+        begin=(begin-1)<0?length-1:begin-1;
+        array[begin]=item;
     }
 
-    /** add one item at the end of the deque.
-     * @param item item we want to add
-     */
     @Override
     public void addLast(T item) {
-        if (size == length - 1) {
-            grow();
+        //resize
+        if (this.size()==(length-1)) {
+            resize();
         }
-        array[last] = item;
-        last = plusOne(last, length);
-        size++;
+        array[end]=item;
+        end=(end+1)>=length?0:end+1;
     }
 
-    /** remove the first item.
-     * @return the removed first item
-    */
+    @Override
+    public void printDeque() {
+        int i=begin;
+        while (i!=end) {
+            System.out.print(array[i]+" ");
+            i=(i+1)==length?0:i+1;
+        }
+        System.out.print("\n");
+    }
+
     @Override
     public T removeFirst() {
-        if (length >= 16 && length / size >= 4) {
-            shrink();
-        }
-        if (size == 0) {
-            return null;
-        }
-        T ret = array[front];
-        front = plusOne(front, length);
-        size--;
+        if (size()==0) return null;
+        if (size()<=(length/2-1) && length>8) shrink();
+        T ret=array[begin];
+        begin=(begin+1)>=length?0:begin+1;
         return ret;
     }
 
-    /** remove the last item.
-     * @return the removed last item
-     */
     @Override
     public T removeLast() {
-        if (length >= 16 && length / size >= 4) {
-            shrink();
-        }
-        if (size == 0) {
-            return null;
-        }
-        last = minusOne(last);
-        size--;
-        return array[last];
-    }
-
-    /** return the item indexed at index.
-     * @param index index
-     */
+        if (size()==0) return null;
+        if (size()<=(length/2-1) && length>8) shrink();
+        end=(end-1)<0?length-1:end-1;
+        T ret=array[end];
+        return ret;
+    }   
+    
     @Override
     public T get(int index) {
-        if (index >= size) {
-            return null;
-        }
-        int ptr = front;
-        for (int i = 0; i < index; i++) {
-            ptr = plusOne(ptr, length);
-        }
-        return array[ptr];
+        if (index>size()) return null;
+        return array[(begin+index)%length];
     }
 
-    /** print the entire deque from front to end. */
-    @Override
-    public void printDeque() {
-        int ptr = front;
-        while (ptr != last) {
-            System.out.print(array[ptr] + " ");
-            ptr = plusOne(ptr, length);
-        }
+   public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
     }
 
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int wizPos;
+
+        private ArrayDequeIterator() {
+            wizPos = 0;
+        }
+
+        public boolean hasNext() {
+            return wizPos < size();
+        }
+
+        public T next() {
+            T item = get(wizPos);
+            wizPos += 1;
+            return item;
+        }
+    }
 }
