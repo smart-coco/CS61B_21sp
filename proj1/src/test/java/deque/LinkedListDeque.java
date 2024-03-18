@@ -121,4 +121,25 @@ public class LinkedListDeque<T> implements Deque<T>,Iterable<T>{
             return item;
         }
     }
+    public boolean equals(Object cmp) {
+        if (this == cmp) {
+            return true;
+        }
+        if (cmp == null) {
+            return false;
+        }
+        if (!(cmp instanceof Deque)) {
+            return false;
+        }
+        Deque<T> oa = (Deque<T>) cmp;
+        if (oa.size() != this.size()) {
+            return false;
+        }
+        for (int i = 0; i < size(); i += 1) {
+            if (!(oa.get(i).equals(this.get(i)))) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

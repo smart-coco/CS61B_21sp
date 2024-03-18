@@ -1,6 +1,8 @@
 package deque;
 import java.util.Iterator;
 
+import com.puppycrawl.tools.checkstyle.grammars.javadoc.JavadocParser.TrContext;
+
 public class ArrayDeque<T> implements Deque<T>,Iterable<T>{
     private T[] array;
     private int length;
@@ -97,7 +99,7 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T>{
     @Override
     public T removeFirst() {
         if (size()==0) return null;
-        if (size()<=(length/2-1) && length>8) shrink();
+        if (size()<=(length/2-2) && length>8) shrink();
         T ret=array[begin];
         begin=(begin+1)>=length?0:begin+1;
         return ret;
@@ -138,5 +140,27 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T>{
             wizPos += 1;
             return item;
         }
+    }
+
+    public boolean equals(Object cmp) {
+        if (this == cmp) {
+            return true;
+        }
+        if (cmp == null) {
+            return false;
+        }
+        if (!(cmp instanceof Deque)) {
+            return false;
+        }
+        Deque<T> oa = (Deque<T>) cmp;
+        if (oa.size() != this.size()) {
+            return false;
+        }
+        for (int i = 0; i < size(); i += 1) {
+            if (!(oa.get(i).equals(this.get(i)))) {
+                return false;
+            }
+        }
+        return true;
     }
 }
