@@ -99,7 +99,7 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T>{
     @Override
     public T removeFirst() {
         if (size()==0) return null;
-        if (size()<=(length/2-2) && length>8) shrink();
+        if (size()<=(length/2-3) && length>8) shrink();
         T ret=array[begin];
         begin=(begin+1)>=length?0:begin+1;
         return ret;
@@ -108,7 +108,7 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T>{
     @Override
     public T removeLast() {
         if (size()==0) return null;
-        if (size()<=(length/2-2) && length>8) shrink();
+        if (size()<=(length/2-3) && length>8) shrink();
         end=(end-1)<0?length-1:end-1;
         T ret=array[end];
         return ret;
