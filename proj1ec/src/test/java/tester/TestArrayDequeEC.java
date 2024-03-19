@@ -6,6 +6,17 @@ import student.StudentArrayDeque;
 import edu.princeton.cs.algs4.StdRandom;
 
 public class TestArrayDequeEC {
+
+    @Test
+    public void testrandomTest() {
+        Integer a, b;
+
+        a = 10;
+        b = 20;
+        System.out.println(a);
+        assertEquals(a, b);
+    }
+
     @Test
     public void randomTest() {
 
@@ -44,8 +55,6 @@ public class TestArrayDequeEC {
                 // removefirst
                 Integer expect = solution.removeFirst();
                 Integer actual = student.removeFirst();
-                expect = student.removeFirst();
-                actual = student.removeFirst();
                 prompt += "removeFirst()\n";
                 assertEquals(prompt, expect, actual);
             }
@@ -57,8 +66,6 @@ public class TestArrayDequeEC {
                 // removeLast
                 Integer expect = solution.removeLast();
                 Integer actual = student.removeLast();
-                expect = student.removeLast();
-                actual = student.removeLast();
                 prompt += "removeLast()\n";
                 assertEquals(prompt, expect, actual);
             }
