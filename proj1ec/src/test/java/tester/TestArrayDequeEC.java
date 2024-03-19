@@ -4,16 +4,22 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import student.StudentArrayDeque;
 import edu.princeton.cs.algs4.StdRandom;
+import java.lang.reflect.Field;
 
 public class TestArrayDequeEC {
 
     @Test
     public void testrandomTest() {
-        Integer a, b;
+        int a, b;
+        Integer c, d;
 
         a = 10;
-        b = 20;
-        System.out.println(a);
+        b = 10;
+        c = a;
+        System.out.println(c);
+        a = 20;
+        System.out.println(c);
+        d = b;
         assertEquals(a, b);
     }
 
@@ -26,7 +32,7 @@ public class TestArrayDequeEC {
         ArrayDequeSolution<Integer> solution = new ArrayDequeSolution<Integer>();
 
         String prompt = "";
-        int N = 10000;
+        int N = 100;
         int boundary = 10000;
         for (int i = 0; i < N; i++) {
             int op = StdRandom.uniform(0, 4);

@@ -53,8 +53,8 @@ public class TestArrayDequeEC {
                     continue;
                 }
                 // removefirst
-                Integer expect = solution.removeFirst();
-                Integer actual = student.removeFirst();
+                int expect = solution.removeFirst();
+                int actual = student.removeFirst();
                 prompt += "removeFirst()\n";
                 assertEquals(prompt, expect, actual);
             }
@@ -64,8 +64,8 @@ public class TestArrayDequeEC {
                     continue;
                 }
                 // removeLast
-                Integer expect = solution.removeLast();
-                Integer actual = student.removeLast();
+                int expect = solution.removeLast();
+                int actual = student.removeLast();
                 prompt += "removeLast()\n";
                 assertEquals(prompt, expect, actual);
             }
