@@ -6,6 +6,17 @@ import student.StudentArrayDeque;
 import edu.princeton.cs.algs4.StdRandom;
 
 public class TestArrayDequeEC {
+
+    @Test
+    public void testrandomTest() {
+        Integer a, b;
+
+        a = 10;
+        b = 20;
+        System.out.println(a);
+        assertEquals(a, b);
+    }
+
     @Test
     public void randomTest() {
 
@@ -25,7 +36,7 @@ public class TestArrayDequeEC {
                 student.addFirst(num);
                 solution.addFirst(num);
                 prompt += "addFirst(" + num + ")\n";
-                assertEquals("size() wrong", student.size(), solution.size());
+                assertEquals("size() wrong", solution.size(), student.size());
             }
             if (op == 1) {
                 Integer num = StdRandom.uniform(-boundary, boundary);
@@ -33,34 +44,30 @@ public class TestArrayDequeEC {
                 student.addLast(num);
                 solution.addLast(num);
                 prompt += "addLast(" + num + ")\n";
-                assertEquals("size() wrong", student.size(), solution.size());
+                assertEquals("size() wrong", solution.size(), student.size());
             }
 
             if (op == 2) {
-                assertEquals("size() wrong", student.size(), solution.size());
+                assertEquals("size() wrong", solution.size(), student.size());
                 if (solution.isEmpty()) {
                     continue;
                 }
                 // removefirst
                 Integer expect = solution.removeFirst();
                 Integer actual = student.removeFirst();
-                expect = student.removeFirst();
-                actual = student.removeFirst();
                 prompt += "removeFirst()\n";
-                assertEquals(prompt, actual, expect);
+                assertEquals(prompt, expect, actual);
             }
             if (op == 3) {
-                assertEquals("size() wrong", student.size(), solution.size());
+                assertEquals("size() wrong", solution.size(), student.size());
                 if (solution.isEmpty()) {
                     continue;
                 }
                 // removeLast
                 Integer expect = solution.removeLast();
                 Integer actual = student.removeLast();
-                expect = student.removeLast();
-                actual = student.removeLast();
                 prompt += "removeLast()\n";
-                assertEquals(prompt, actual, expect);
+                assertEquals(prompt, expect, actual);
             }
         }
     }
