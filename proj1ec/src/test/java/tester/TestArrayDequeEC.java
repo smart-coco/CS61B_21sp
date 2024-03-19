@@ -14,6 +14,7 @@ public class TestArrayDequeEC {
         StudentArrayDeque<Integer> student = new StudentArrayDeque<Integer>();
         ArrayDequeSolution<Integer> solution = new ArrayDequeSolution<Integer>();
 
+        String prompt = "";
         int N = 10000;
         int boundary = 10000;
         for (int i = 0; i < N; i++) {
@@ -23,6 +24,7 @@ public class TestArrayDequeEC {
                 // addFirst
                 student.addFirst(num);
                 solution.addFirst(num);
+                prompt += "addFirst(" + num + ")\n";
                 assertEquals("size() wrong", student.size(), solution.size());
             }
             if (op == 1) {
@@ -30,6 +32,7 @@ public class TestArrayDequeEC {
                 // addLast
                 student.addLast(num);
                 solution.addLast(num);
+                prompt += "addLast(" + num + ")\n";
                 assertEquals("size() wrong", student.size(), solution.size());
             }
             if (op == 2) {
@@ -42,6 +45,7 @@ public class TestArrayDequeEC {
                 Integer actual = student.removeFirst();
                 expect = student.removeFirst();
                 actual = student.removeFirst();
+                prompt += "removeFirst()\n";
                 assertEquals("expect is " + expect + ",but actual" + actual, actual, expect);
             }
             if (op == 3) {
@@ -54,6 +58,7 @@ public class TestArrayDequeEC {
                 Integer actual = student.removeLast();
                 expect = student.removeLast();
                 actual = student.removeLast();
+                prompt += "removeLast()\n";
                 assertEquals("expect is " + expect + ",but actual" + actual, actual, expect);
             }
         }
