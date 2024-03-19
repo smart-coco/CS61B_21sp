@@ -10,17 +10,10 @@ public class TestArrayDequeEC {
 
     @Test
     public void testrandomTest() {
-        int a, b;
-        Integer c, d;
-
-        a = 10;
-        b = 10;
-        c = a;
-        System.out.println(c);
-        a = 20;
-        System.out.println(c);
-        d = b;
-        assertEquals(a, b);
+        StudentArrayDeque<Integer> student = new StudentArrayDeque<Integer>();
+        ArrayDequeSolution<Integer> solution = new ArrayDequeSolution<Integer>();
+        student.get(2);
+        System.out.println(student.get(2));
     }
 
     @Test

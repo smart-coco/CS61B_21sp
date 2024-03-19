@@ -1,48 +1,72 @@
 package tester;
 
 import static org.junit.Assert.*;
-
-import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
 import student.StudentArrayDeque;
+import edu.princeton.cs.algs4.StdRandom;
+import java.lang.reflect.Field;
 
 public class TestArrayDequeEC {
 
     @Test
-    public void testDeque() {
-        StudentArrayDeque<Integer> st = new StudentArrayDeque<>();
-        ArrayDequeSolution<Integer> ad = new ArrayDequeSolution<>();
+    public void testrandomTest() {
+        StudentArrayDeque<Integer> student = new StudentArrayDeque<Integer>();
+        ArrayDequeSolution<Integer> solution = new ArrayDequeSolution<Integer>();
+        student.get(2);
+        System.out.println(student.get(2));
+    }
 
-        int n = 5000;
-        String str = "\n";
-        for (int i = 0; i < n; i++) {
-            int opt = StdRandom.uniform(0, 4);
-            if (opt == 0) {
+    @Test
+    public void randomTest() {
+
+        // System.out.println("Make sure to uncomment the lines below (and delete this
+        // print statement).");
+        StudentArrayDeque<Integer> student = new StudentArrayDeque<Integer>();
+        ArrayDequeSolution<Integer> solution = new ArrayDequeSolution<Integer>();
+
+        String prompt = "";
+        int N = 100;
+        int boundary = 10000;
+        for (int i = 0; i < N; i++) {
+            int op = StdRandom.uniform(0, 4);
+            if (op == 0) {
+                int num = StdRandom.uniform(-boundary, boundary);
                 // addFirst
-                int num = StdRandom.uniform(0, 100);
-                st.addFirst(num);
-                ad.addFirst(num);
-                str += "addFirst(" + num + ")\n";
-            } else if (opt == 1) {
+                student.addFirst(num);
+                solution.addFirst(num);
+                prompt += "addFirst(" + num + ")\n";
+                assertEquals("size() wrong", solution.size(), student.size());
+            }
+            if (op == 1) {
+                int num = StdRandom.uniform(-boundary, boundary);
                 // addLast
-                int num = StdRandom.uniform(0, 100);
-                st.addLast(num);
-                ad.addLast(num);
-                str += "addLast(" + num + ")\n";
+                student.addLast(num);
+                solution.addLast(num);
+                prompt += "addLast(" + num + ")\n";
+                assertEquals("size() wrong", solution.size(), student.size());
             }
 
-            if (st.isEmpty()) {
-                continue;
+            if (op == 2) {
+                assertEquals("size() wrong", solution.size(), student.size());
+                if (solution.isEmpty()) {
+                    continue;
+                }
+                // removefirst
+                Integer expect = solution.removeFirst();
+                Integer actual = student.removeFirst();
+                prompt += "removeFirst()\n";
+                assertEquals(prompt, expect, actual);
             }
-
-            if (opt == 2) {
-                // removeFirst
-                str += "removeFirst()\n";
-                assertEquals(str, ad.removeFirst(), st.removeFirst());
-            } else if (opt == 3) {
+            if (op == 3) {
+                assertEquals("size() wrong", solution.size(), student.size());
+                if (solution.isEmpty()) {
+                    continue;
+                }
                 // removeLast
-                str += "removeLast()\n";
-                assertEquals(str, ad.removeLast(), st.removeLast());
+                Integer expect = solution.removeLast();
+                Integer actual = student.removeLast();
+                prompt += "removeLast()\n";
+                assertEquals(prompt, expect, actual);
             }
         }
     }
