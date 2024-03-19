@@ -5,7 +5,7 @@ import org.junit.Test;
 import student.StudentArrayDeque;
 import edu.princeton.cs.algs4.StdRandom;
 
-public class TestArrayDequeEC {
+public class ArrayDequeSolutionTest {
     @Test
     public void randomTest() {
 
