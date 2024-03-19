@@ -37,7 +37,7 @@ public class TestArrayDequeEC {
         for (int i = 0; i < N; i++) {
             int op = StdRandom.uniform(0, 4);
             if (op == 0) {
-                Integer num = StdRandom.uniform(-boundary, boundary);
+                int num = StdRandom.uniform(-boundary, boundary);
                 // addFirst
                 student.addFirst(num);
                 solution.addFirst(num);
@@ -45,7 +45,7 @@ public class TestArrayDequeEC {
                 assertEquals("size() wrong", solution.size(), student.size());
             }
             if (op == 1) {
-                Integer num = StdRandom.uniform(-boundary, boundary);
+                int num = StdRandom.uniform(-boundary, boundary);
                 // addLast
                 student.addLast(num);
                 solution.addLast(num);
