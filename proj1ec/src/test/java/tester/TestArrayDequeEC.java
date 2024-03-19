@@ -25,7 +25,7 @@ public class TestArrayDequeEC {
                 student.addFirst(num);
                 solution.addFirst(num);
                 prompt += "addFirst(" + num + ")\n";
-                assertEquals("size() wrong", student.size(), solution.size());
+                assertEquals("size() wrong", solution.size(), student.size());
             }
             if (op == 1) {
                 Integer num = StdRandom.uniform(-boundary, boundary);
@@ -33,11 +33,11 @@ public class TestArrayDequeEC {
                 student.addLast(num);
                 solution.addLast(num);
                 prompt += "addLast(" + num + ")\n";
-                assertEquals("size() wrong", student.size(), solution.size());
+                assertEquals("size() wrong", solution.size(), student.size());
             }
 
             if (op == 2) {
-                assertEquals("size() wrong", student.size(), solution.size());
+                assertEquals("size() wrong", solution.size(), student.size());
                 if (solution.isEmpty()) {
                     continue;
                 }
@@ -47,10 +47,10 @@ public class TestArrayDequeEC {
                 expect = student.removeFirst();
                 actual = student.removeFirst();
                 prompt += "removeFirst()\n";
-                assertEquals(prompt, actual, expect);
+                assertEquals(prompt, expect, actual);
             }
             if (op == 3) {
-                assertEquals("size() wrong", student.size(), solution.size());
+                assertEquals("size() wrong", solution.size(), student.size());
                 if (solution.isEmpty()) {
                     continue;
                 }
@@ -60,7 +60,7 @@ public class TestArrayDequeEC {
                 expect = student.removeLast();
                 actual = student.removeLast();
                 prompt += "removeLast()\n";
-                assertEquals(prompt, actual, expect);
+                assertEquals(prompt, expect, actual);
             }
         }
     }
