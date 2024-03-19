@@ -7,27 +7,25 @@ import edu.princeton.cs.introcs.StdAudio;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/** Tests the GuitarString class.
- *  @author Josh Hug
+/**
+ * Tests the GuitarString class.
+ * 
+ * @author Josh Hug
  */
-public class TestGuitarString  {
+public class TestGuitarString {
 
     @Test
     public void testTic1() {
         GuitarString aString = new GuitarString(GuitarHeroLite.CONCERT_A);
         aString.pluck();
-        System.out.println(aString.size());
         StdAudio.play(aString.sample());
         aString.tic();
-        System.out.println(aString.size());
     }
 
     @Test
     public void testPluckTheAString() {
         GuitarString aString = new GuitarString(GuitarHeroLite.CONCERT_A);
         aString.pluck();
-        System.out.println(GuitarHeroLite.CONCERT_A);
-        System.out.println(aString.size());
         for (int i = 0; i < 50000; i += 1) {
             System.out.println(i);
             StdAudio.play(aString.sample());
@@ -49,7 +47,6 @@ public class TestGuitarString  {
         assertEquals("Sample should not change the state of your string.", sample, s.sample(), 0.0);
     }
 
-
     @Test
     public void testTic() {
         GuitarString s = new GuitarString(100);
@@ -64,11 +61,10 @@ public class TestGuitarString  {
         assertNotEquals("After tic(), your samples should not stay the same.", sample1, s.sample());
     }
 
-
     @Test
     public void testTicCalculations() {
         // Create a GuitarString of frequency 11025, which
-        // is a Deque of length 4. 
+        // is a Deque of length 4.
         GuitarString s = new GuitarString(11025);
         s.pluck();
 
@@ -76,7 +72,7 @@ public class TestGuitarString  {
         double s1 = s.sample();
         s.tic();
         double s2 = s.sample();
-        s.tic(); 
+        s.tic();
         double s3 = s.sample();
         s.tic();
         double s4 = s.sample();
@@ -93,4 +89,3 @@ public class TestGuitarString  {
         assertEquals("Wrong tic value. Try running the testTic method.", expected, s5, 0.001);
     }
 }
-

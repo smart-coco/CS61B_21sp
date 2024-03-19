@@ -18,7 +18,7 @@ public class GuitarString {
     // TODO: uncomment the following line once you're ready to start this portion
     private Deque<Double> buffer;
     
-    public int size() {
+    private int size() {
         return buffer.size();
     }
 
