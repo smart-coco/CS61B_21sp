@@ -103,10 +103,12 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     @Override
     public T removeFirst() {
-        if (size() == 0)
+        if (size() == 0) {
             return null;
-        if (size() <= (length / 4) && length > 8)
+        }
+        if (size() <= (length / 4) && length > 8) {
             shrink();
+        }
         T ret = array[begin];
         begin = (begin + 1) >= length ? 0 : begin + 1;
         return ret;
