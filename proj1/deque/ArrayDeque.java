@@ -116,10 +116,12 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     @Override
     public T removeLast() {
-        if (size() == 0)
+        if (size() == 0) {
             return null;
-        if (size() <= (length / 4) && length > 8)
+        }
+        if (size() <= (length / 4) && length > 8) {
             shrink();
+        }
         end = (end - 1) < 0 ? length - 1 : end - 1;
         T ret = array[end];
         return ret;
@@ -127,8 +129,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     @Override
     public T get(int index) {
-        if (index > size())
+        if (index > size()) {
             return null;
+        }
         return array[(begin + index) % length];
     }
 

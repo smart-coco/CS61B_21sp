@@ -10,8 +10,9 @@ public class MaxArrayDeque<T> extends ArrayDeque<T> {
     }
 
     public T max() {
-        if (isEmpty())
+        if (isEmpty()) {
             return null;
+        }
         T maxItem = get(0);
         for (int i = 0; i < size(); i++) {
             if (cmp.compare(get(i), maxItem) > 0) {
