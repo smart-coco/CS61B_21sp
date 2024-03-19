@@ -46,7 +46,7 @@ public class TestArrayDequeEC {
                 expect = student.removeFirst();
                 actual = student.removeFirst();
                 prompt += "removeFirst()\n";
-                assertEquals("expect is " + expect + ",but actual" + actual, actual, expect);
+                assertEquals(prompt, actual, expect);
             }
             if (op == 3) {
                 assertEquals("size() wrong", student.size(), solution.size());
@@ -59,7 +59,7 @@ public class TestArrayDequeEC {
                 expect = student.removeLast();
                 actual = student.removeLast();
                 prompt += "removeLast()\n";
-                assertEquals("expect is " + expect + ",but actual" + actual, actual, expect);
+                assertEquals(prompt, actual, expect);
             }
         }
     }
