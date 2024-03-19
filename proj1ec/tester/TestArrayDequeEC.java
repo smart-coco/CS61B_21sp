@@ -35,10 +35,11 @@ public class TestArrayDequeEC {
                 prompt += "addLast(" + num + ")\n";
                 assertEquals("size() wrong", student.size(), solution.size());
             }
+
             if (op == 2) {
                 assertEquals("size() wrong", student.size(), solution.size());
-                if (solution.size() == 0) {
-                    return;
+                if (solution.isEmpty()) {
+                    continue;
                 }
                 // removefirst
                 Integer expect = solution.removeFirst();
@@ -50,8 +51,8 @@ public class TestArrayDequeEC {
             }
             if (op == 3) {
                 assertEquals("size() wrong", student.size(), solution.size());
-                if (solution.size() == 0) {
-                    return;
+                if (solution.isEmpty()) {
+                    continue;
                 }
                 // removeLast
                 Integer expect = solution.removeLast();
