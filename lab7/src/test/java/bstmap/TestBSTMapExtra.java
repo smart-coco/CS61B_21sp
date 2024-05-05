@@ -9,23 +9,24 @@ import org.junit.Test;
 public class TestBSTMapExtra {
 
     /*
-    * Sanity test for keySet, only here because it's optional
-    */
+     * Sanity test for keySet, only here because it's optional
+     */
     @Test
     public void sanityKeySetTest() {
-    	BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+        BSTMap<String, Integer> b = new BSTMap<String, Integer>();
         HashSet<String> values = new HashSet<String>();
         for (int i = 0; i < 455; i++) {
             b.put("hi" + i, 1);
             values.add("hi" + i);
         }
-        assertEquals(455, b.size()); //keys are there
+        assertEquals(455, b.size()); // keys are there
         Set<String> keySet = b.keySet();
         assertTrue(values.containsAll(keySet));
         assertTrue(keySet.containsAll(values));
     }
 
-    /* Remove Test
+    /*
+     * Remove Test
      *
      * Note for testRemoveRoot:
      *
@@ -39,12 +40,12 @@ public class TestBSTMapExtra {
      */
     @Test
     public void testRemoveRoot() {
-        BSTMap<String,String> q = new BSTMap<String,String>();
-        q.put("c","a");
-        q.put("b","a");
-        q.put("a","a");
-        q.put("d","a");
-        q.put("e","a"); // a b c d e
+        BSTMap<String, String> q = new BSTMap<String, String>();
+        q.put("c", "a");
+        q.put("b", "a");
+        q.put("a", "a");
+        q.put("d", "a");
+        q.put("e", "a"); // a b c d e
         assertTrue(null != q.remove("c"));
         assertFalse(q.containsKey("c"));
         assertTrue(q.containsKey("a"));
@@ -53,36 +54,39 @@ public class TestBSTMapExtra {
         assertTrue(q.containsKey("e"));
     }
 
-    /* Remove Test 2
+    /*
+     * Remove Test 2
      * test the 3 different cases of remove
      */
     @Test
     public void testRemoveThreeCases() {
-        BSTMap<String,String> q = new BSTMap<String,String>();
-        q.put("c","a");
-        q.put("b","a");
-        q.put("a","a");
-        q.put("d","a");
-        q.put("e","a");                         // a b c d e
-        assertTrue(null != q.remove("e"));      // a b c d
+        BSTMap<String, String> q = new BSTMap<String, String>();
+        q.put("c", "a");
+        q.put("b", "a");
+        q.put("a", "a");
+        q.put("d", "a");
+        q.put("e", "a"); // a b c d e
+        assertTrue(null != q.remove("e")); // a b c d
         assertTrue(q.containsKey("a"));
         assertTrue(q.containsKey("b"));
         assertTrue(q.containsKey("c"));
         assertTrue(q.containsKey("d"));
-        assertTrue(null != q.remove("c"));      // a b d
+        assertTrue(null != q.remove("c")); // a b d
         assertTrue(q.containsKey("a"));
         assertTrue(q.containsKey("b"));
         assertTrue(q.containsKey("d"));
-        q.put("f","a");                         // a b d f
-        assertTrue(null != q.remove("d"));      // a b f
+        q.put("f", "a"); // a b d f
+        assertTrue(null != q.remove("d")); // a b f
         assertTrue(q.containsKey("a"));
         assertTrue(q.containsKey("b"));
         assertTrue(q.containsKey("f"));
     }
 
-    /* Remove Test 3
-    *  Checks that remove works correctly on root nodes
-    *  when the node has only 1 or 0 children on either side. */
+    /*
+     * Remove Test 3
+     * Checks that remove works correctly on root nodes
+     * when the node has only 1 or 0 children on either side.
+     */
     @Test
     public void testRemoveRootEdge() {
         BSTMap rightChild = new BSTMap();
@@ -91,13 +95,13 @@ public class TestBSTMapExtra {
         Integer result = (Integer) rightChild.remove('A');
         assertTrue(result.equals(new Integer(1)));
         for (int i = 0; i < 10; i++) {
-            rightChild.put((char) ('C'+i), 3+i);
+            rightChild.put((char) ('C' + i), 3 + i);
         }
         rightChild.put('A', 100);
         assertTrue(((Integer) rightChild.remove('D')).equals(new Integer(4)));
         assertTrue(((Integer) rightChild.remove('G')).equals(new Integer(7)));
         assertTrue(((Integer) rightChild.remove('A')).equals(new Integer(100)));
-        assertTrue(rightChild.size()==9);
+        assertTrue(rightChild.size() == 9);
 
         BSTMap leftChild = new BSTMap();
         leftChild.put('B', 1);
