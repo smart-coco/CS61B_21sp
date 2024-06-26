@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.Date; // TODO: You'll likely use this in this class
 import java.util.HashMap;
 import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import static gitlet.Utils.*;
 
@@ -28,25 +30,25 @@ public class Commit implements Serializable {
 
     /** The message of this Commit. */
     private String message;
-    private String timestamp;
+    private Date timestamp;
     private String parent;
     private Map<String, String> file_map;
     private String sha1;
 
     // first commit
     public Commit() {
-        this.message = "";
-        this.timestamp = "00:00:00 UTC, Thursday, 1 January 1970";
+        this.message = "initial commit";
+        this.timestamp = new Date(0);
         this.parent = "";
         file_map = new HashMap<>();
 
-        this.sha1 = Utils.sha1(message, timestamp, parent, file_map.toString());
+        this.sha1 = Utils.sha1(message, timestamp.toString(), parent, file_map.toString());
     }
 
     // commit structor
     public Commit(String message) {
         this.message = message;
-        this.timestamp = new Date().toString();
+        this.timestamp = new Date();
 
         // get head commit
         String head_commit_sha1 = readContentsAsString(Repository.HEAD_FILE);
@@ -72,13 +74,15 @@ public class Commit implements Serializable {
         }
 
         // compute sha1
-        this.sha1 = Utils.sha1(message, timestamp, parent, file_map.toString());
+        this.sha1 = Utils.sha1(message, timestamp.toString(), parent, file_map.toString());
 
     }
 
     // get timestamp
     public String get_timestamp() {
-        return this.timestamp;
+        // dateformat
+        DateFormat df = new SimpleDateFormat("EEE MMM d HH:mm:ss yyyy Z");
+        return df.format(this.timestamp);
     }
 
     // get sha1
