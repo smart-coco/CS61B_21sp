@@ -65,7 +65,7 @@ public class Repository {
         writeContents(join(BRANCH_DIR, "master"), commit.get_sha1());
 
         // new head and consist
-        writeContents(HEAD_FILE, commit.get_sha1());
+        writeContents(HEAD_FILE, "master");
     }
 
     // add
@@ -90,7 +90,8 @@ public class Repository {
         stage.store_addtion(file_name, file_sha1);
 
         // get active_commit
-        String active_commit = readContentsAsString(HEAD_FILE);
+        String head_branch = readContentsAsString(HEAD_FILE);
+        String active_commit = readContentsAsString(join(BRANCH_DIR, head_branch));
         Commit commit = readObject(join(COMMIT_DIR, active_commit), Commit.class);
 
         // if key:value equal to current commit version
@@ -122,8 +123,9 @@ public class Repository {
         // make a new commit
         Commit new_commit = new Commit(message);
 
-        // change head
-        writeContents(HEAD_FILE, new_commit.get_sha1());
+        // change branch
+        String head_branch = readContentsAsString(HEAD_FILE);
+        writeContents(join(BRANCH_DIR, head_branch), new_commit.get_sha1());
 
         // new_commit consist
         writeObject(join(COMMIT_DIR, new_commit.get_sha1()), new_commit);
@@ -138,7 +140,8 @@ public class Repository {
         Stage stage = readObject(STAGE_FILE, Stage.class);
 
         // get active_commit
-        String active_commit = readContentsAsString(HEAD_FILE);
+        String head_branch = readContentsAsString(HEAD_FILE);
+        String active_commit = readContentsAsString(join(BRANCH_DIR, head_branch));
         Commit commit = readObject(join(COMMIT_DIR, active_commit), Commit.class);
 
         // If the file is neither staged nor tracked by the head commit
@@ -168,7 +171,6 @@ public class Repository {
                     file_path.delete();
                 }
             }
-
         }
 
         // write stage
@@ -177,9 +179,9 @@ public class Repository {
 
     // log
     public static void log() {
-
         // get head commit
-        String point_commit_sha1 = readContentsAsString(Repository.HEAD_FILE);
+        String head_branch = readContentsAsString(HEAD_FILE);
+        String point_commit_sha1 = readContentsAsString(join(BRANCH_DIR, head_branch));
 
         // repeat get parent commit until null
         while (!point_commit_sha1.equals("")) {
@@ -196,13 +198,44 @@ public class Repository {
         }
     }
 
+    // global-log
+    public static void global_log() {
+        // get list of commit
+        List<String> commit_list = plainFilenamesIn(COMMIT_DIR);
+
+        // iterate and print out
+        for (String commit_sha1 : commit_list) {
+            Commit commit = readObject(join(COMMIT_DIR, commit_sha1), Commit.class);
+            System.out.println("===");
+            System.out.println("commit" + " " + commit_sha1);
+            System.out.println("Date" + " " + commit.get_timestamp());
+            System.out.println(commit.get_message());
+            System.out.println();
+        }
+    }
+
+    // find
+    public static void find(String message) {
+        // get list of commit
+        List<String> commit_list = plainFilenamesIn(COMMIT_DIR);
+
+        // iterate and print out
+        for (String commit_sha1 : commit_list) {
+            Commit commit = readObject(join(COMMIT_DIR, commit_sha1), Commit.class);
+            if (commit.get_message().equals(message)) {
+                System.out.println(commit_sha1);
+            }
+        }
+    }
+
     // status
     public static void status() {
         // show branch
         System.out.println("=== Branches ===");
         // get head commit
-        String head_commit = readContentsAsString(HEAD_FILE);
-        Commit commit = readObject(join(COMMIT_DIR, head_commit), Commit.class);
+        String head_branch = readContentsAsString(HEAD_FILE);
+        String head_commit = readContentsAsString(join(BRANCH_DIR, head_branch));
+
         List<String> branch_list = plainFilenamesIn(BRANCH_DIR);
 
         for (String item : branch_list) {
@@ -232,6 +265,9 @@ public class Repository {
             System.out.println(key);
         }
         System.out.println();
+
+        // get current commit class
+        Commit commit = readObject(join(COMMIT_DIR, head_commit), Commit.class);
 
         // get current file list
         List<String> current_list = plainFilenamesIn(CWD);
@@ -295,7 +331,8 @@ public class Repository {
     // checkout 2
     public static void checkout(String label, String file_name) {
         // get current commit class
-        String head_commit = readContentsAsString(HEAD_FILE);
+        String head_branch = readContentsAsString(HEAD_FILE);
+        String head_commit = readContentsAsString(join(BRANCH_DIR, head_branch));
         Commit commit = readObject(join(COMMIT_DIR, head_commit), Commit.class);
 
         // if not contain file_name return
@@ -333,5 +370,41 @@ public class Repository {
 
         // write content to file
         writeContents(join(CWD, file_name), file_content);
+    }
+
+    // branch
+    public static void branch(String branch_name) {
+        // If a branch with the given name already exists
+        List<String> branch_list = plainFilenamesIn(BRANCH_DIR);
+        for (String item : branch_list) {
+            if (item.equals(branch_name)) {
+                System.out.println("A branch with that name already exists.");
+                return;
+            }
+        }
+
+        // get current commit class
+        String head_branch = readContentsAsString(HEAD_FILE);
+        String head_commit = readContentsAsString(join(BRANCH_DIR, head_branch));
+        Commit commit = readObject(join(COMMIT_DIR, head_commit), Commit.class);
+
+        // make a new branch
+        writeContents(join(BRANCH_DIR, branch_name), commit.get_sha1());
+    }
+
+    // rm-branch
+    public static void rm_branch(String branch_name) {
+        // If a branch with the given name does not exist
+        if (!join(BRANCH_DIR, branch_name).exists()) {
+            System.out.println("A branch with that name does not exist.");
+        }
+
+        // If you try to remove the branch you’re currently on
+        if (readContentsAsString(HEAD_FILE).equals(branch_name)) {
+            System.out.println("Cannot remove the current branch.");
+        }
+
+        // delete branch
+        join(BRANCH_DIR, branch_name).delete();
     }
 }

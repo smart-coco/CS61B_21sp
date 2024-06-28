@@ -51,7 +51,8 @@ public class Commit implements Serializable {
         this.timestamp = new Date();
 
         // get head commit
-        String head_commit_sha1 = readContentsAsString(Repository.HEAD_FILE);
+        String head_branch = readContentsAsString(Repository.HEAD_FILE);
+        String head_commit_sha1 = readContentsAsString(join(Repository.BRANCH_DIR, head_branch));
         this.parent = head_commit_sha1;
         Commit head_commit = readObject(join(Repository.COMMIT_DIR, head_commit_sha1), Commit.class);
 

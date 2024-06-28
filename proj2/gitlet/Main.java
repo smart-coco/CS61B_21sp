@@ -39,10 +39,10 @@ public class Main {
                 Repository.log();
                 break;
             case "global-log":
-                // TODO: handle the `add [filename]` command
+                Repository.global_log();
                 break;
             case "find":
-                // TODO: handle the `add [filename]` command
+                Repository.find(args[1]);
                 break;
             case "status":
                 Repository.status();
@@ -59,10 +59,10 @@ public class Main {
                 }
                 break;
             case "branch":
-                // TODO: handle the `add [filename]` command
+                Repository.branch(args[1]);
                 break;
             case "rm-branch":
-                // TODO: handle the `add [filename]` command
+                Repository.rm_branch(args[1]);
                 break;
             case "reset":
                 // TODO: handle the `add [filename]` command
