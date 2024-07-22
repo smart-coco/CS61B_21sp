@@ -86,11 +86,14 @@ public class Repository {
         // make a blob and point to it sha1
         writeContents(join(BLOB_DIR, file_sha1), readContents(file_path));
 
-        // if name exist in stage ?
+        // if name exist in stage addtion?
         // Yes: override
         // No: add to dic
         Stage stage = readObject(STAGE_FILE, Stage.class);
         stage.store_addtion(file_name, file_sha1);
+
+        // if name exist in stage removal remove it
+        stage.remove_removal(file_name);
 
         // get active_commit
         String head_branch = readContentsAsString(HEAD_FILE);
@@ -169,10 +172,7 @@ public class Repository {
             stage.store_removal(file_name, sha1_current);
             // if file in active_commit sha1 == current file,remove it from work directory
             if (file_path.exists()) {
-                String sha1_commit = commit.get_file_map().get(file_name);
-                if (sha1_current == sha1_commit) {
-                    file_path.delete();
-                }
+                file_path.delete();
             }
         }
 
