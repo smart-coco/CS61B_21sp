@@ -65,10 +65,10 @@ public class Main {
                 Repository.rm_branch(args[1]);
                 break;
             case "reset":
-                // TODO: handle the `add [filename]` command
+                Repository.reset(args[1]);
                 break;
             case "merge":
-                // TODO: handle the `add [filename]` command
+                Repository.merge(args[1]);
                 break;
             default:
                 System.out.println(

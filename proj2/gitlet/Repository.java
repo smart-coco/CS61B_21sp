@@ -3,6 +3,9 @@ package gitlet;
 import java.io.File;
 import java.util.Map;
 import java.util.List;
+import java.util.Set;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import static gitlet.Utils.*;
 
@@ -406,5 +409,231 @@ public class Repository {
 
         // delete branch
         join(BRANCH_DIR, branch_name).delete();
+    }
+
+    // reset
+    public static void reset(String commit_sha1) {
+        // get class of commit_sha1 If no commit with the given id exists, print No
+        // commit with that id exists.
+        if (!join(COMMIT_DIR, commit_sha1).exists()) {
+            System.out.println("No commit with that id exists.");
+            return;
+        }
+        Commit target_commit = readObject(join(COMMIT_DIR, commit_sha1), Commit.class);
+
+        // get class of current head branch
+        String head_branch = readContentsAsString(HEAD_FILE);
+        String head_commit_sha1 = readContentsAsString(join(BRANCH_DIR, head_branch));
+        Commit head_commit = readObject(join(COMMIT_DIR, head_commit_sha1), Commit.class);
+
+        // If a working file is untracked in the current branch and would be
+        // overwritten by the reset, print `There is an untracked file in the way;
+        // delete it, or add and commit it first.`
+        List<String> cwd_file_list = plainFilenamesIn(CWD);
+        for (String item : cwd_file_list) {
+            // meet the condition
+            if (!head_commit.get_file_map().containsKey(item) && target_commit.get_file_map().containsKey(item)) {
+                String current_file_sha1 = sha1(readContents(join(CWD, item)));
+                String target_file_sha1 = target_commit.get_file_map().get(item);
+                if (current_file_sha1.equals(target_file_sha1)) {
+                    System.out.println("There is an untracked file in the way; delete it, or add and commit it first.");
+                    return;
+                }
+            }
+        }
+
+        // Checks out all the files tracked by the given commit
+        for (String item : target_commit.get_file_map().keySet()) {
+            Repository.checkout(head_commit_sha1, "--", item);
+        }
+
+        // Removes tracked files that are not present in that commit
+        for (String item : cwd_file_list) {
+            // meet the condition
+            if (head_commit.get_file_map().containsKey(item) && !target_commit.get_file_map().containsKey(item)) {
+                join(CWD, item).delete();
+            }
+        }
+
+        // moves the current branch’s head to that commit node
+        writeContents(join(BRANCH_DIR, head_branch), commit_sha1);
+
+        // restore stage
+        writeObject(STAGE_FILE, new Stage());
+    }
+
+    // merge
+    public static void merge(String branch_name) {
+        // fail case
+        // If a branch with the given name does not exist,
+        if (!join(BRANCH_DIR, branch_name).exists()) {
+            System.out.println("A branch with that name does not exist.");
+            return;
+        }
+        // If there are staged additions or removals present
+        Stage stage = readObject(STAGE_FILE, Stage.class);
+        if (stage.get_addtion().size() != 0 || stage.get_removal().size() != 0) {
+            System.out.println("You have uncommitted changes.");
+            return;
+        }
+        // If attempting to merge a branch with itself
+        if (readContentsAsString(HEAD_FILE).equals(branch_name)) {
+            System.out.println("Cannot merge a branch with itself.");
+            return;
+        }
+        // TODO If an untracked file in the current commit would be overwritten or
+        // deleted by the merge
+
+        // get class of split point_commit
+        // Step1 get the set of current branch
+        Set<String> ancestor_commit = new HashSet<String>();
+        // get head commit
+        String head_branch = readContentsAsString(HEAD_FILE);
+        String current_commit_sha1 = readContentsAsString(join(BRANCH_DIR, head_branch));
+        String point_commit_sha1 = readContentsAsString(join(BRANCH_DIR, head_branch));
+        // repeat get parent commit until null
+        while (!point_commit_sha1.equals("")) {
+            ancestor_commit.add(point_commit_sha1);
+            // get commit
+            Commit commit = readObject(join(COMMIT_DIR, point_commit_sha1), Commit.class);
+            // get next commit sha1
+            point_commit_sha1 = commit.get_parent();
+        }
+
+        // Step2 iterate target branch until find commit in the set of current branch
+        // get head commit
+        String target_commit_sha1 = readContentsAsString(join(BRANCH_DIR, branch_name));
+        point_commit_sha1 = readContentsAsString(join(BRANCH_DIR, branch_name));
+        String split_commit_sha1 = null;
+        // repeat get parent commit until null
+        while (!point_commit_sha1.equals("")) {
+            // if contains break
+            if (ancestor_commit.contains(point_commit_sha1)) {
+                split_commit_sha1 = point_commit_sha1;
+                break;
+            }
+            // get commit
+            Commit commit = readObject(join(COMMIT_DIR, point_commit_sha1), Commit.class);
+            // get next commit sha1
+            point_commit_sha1 = commit.get_parent();
+        }
+
+        // split point fail case
+        // If the split point is the same commit as the given branch
+        if (split_commit_sha1.equals(target_commit_sha1)) {
+            System.out.println("Given branch is an ancestor of the current branch.");
+            return;
+        }
+        // If the split point is the current branch
+        if (split_commit_sha1.equals(current_commit_sha1)) {
+            checkout(branch_name);
+            System.out.println("Current branch fast-forwarded.");
+            return;
+        }
+
+        // make a set of file and store their status in three commit
+        Map<String, String> file_split_commit = new HashMap<>();
+        Map<String, String> file_current_commit = new HashMap<>();
+        Map<String, String> file_target_commit = new HashMap<>();
+        Map<String, String> file_result_sha1 = new HashMap<>();
+
+        Commit split_commit = readObject(join(COMMIT_DIR, point_commit_sha1), Commit.class);
+        Commit current_commit = readObject(join(COMMIT_DIR, current_commit_sha1), Commit.class);
+        Commit target_commit = readObject(join(COMMIT_DIR, target_commit_sha1), Commit.class);
+        // iterate split point file set
+        for (String item : split_commit.get_file_map().keySet()) {
+            if (!file_split_commit.containsKey(item)) {
+                file_current_commit.put(item, null);
+                file_target_commit.put(item, null);
+            }
+            file_split_commit.put(item, split_commit.get_file_map().get(item));
+        }
+        // iterate current point file set
+        for (String item : current_commit.get_file_map().keySet()) {
+            if (!file_current_commit.containsKey(item)) {
+                file_split_commit.put(item, null);
+                file_target_commit.put(item, null);
+            }
+            file_current_commit.put(item, split_commit.get_file_map().get(item));
+        }
+        // iterate target point file set
+        for (String item : target_commit.get_file_map().keySet()) {
+            if (!file_target_commit.containsKey(item)) {
+                file_split_commit.put(item, null);
+                file_current_commit.put(item, null);
+            }
+            file_target_commit.put(item, split_commit.get_file_map().get(item));
+        }
+
+        // go through the set of file, and deal with then according to the rules
+        for (String item : file_split_commit.keySet()) {
+            // record result sha1
+            String result_sha1 = null;
+            // file_split_commit is not null
+            if (file_split_commit.get(item) != null) {
+                String file_split_commit_sha1 = file_split_commit.get(item);
+                // rule 1
+                if (file_target_commit.get(item) != null && file_split_commit_sha1 != file_target_commit.get(item)
+                        && file_current_commit.get(item) == file_split_commit_sha1) {
+                    result_sha1 = file_target_commit.get(item);
+                }
+
+                // rule 2
+                if (file_current_commit.get(item) != null && file_split_commit_sha1 != file_current_commit.get(item)
+                        && file_target_commit.get(item) == file_split_commit_sha1) {
+                    result_sha1 = file_current_commit.get(item);
+                }
+
+                // TODO rule 3
+                if (file_split_commit_sha1 != file_current_commit.get(item)
+                        && file_split_commit_sha1 != file_target_commit.get(item)) {
+
+                }
+                // rule 6
+                if (file_target_commit.get(item) == null
+                        && file_current_commit.get(item) == file_split_commit.get(item)) {
+                    result_sha1 = null;
+                }
+                // rule 7
+                if (file_current_commit.get(item) == null
+                        && file_target_commit.get(item) == file_split_commit.get(item)) {
+                    result_sha1 = null;
+                }
+            }
+
+            // file_split_commit is null
+            if (file_split_commit.get(item) == null) {
+                // rule 4
+                if (file_target_commit.get(item) == null) {
+                    result_sha1 = file_current_commit.get(item);
+                }
+                // rule 5
+                if (file_current_commit.get(item) == null) {
+                    result_sha1 = file_target_commit.get(item);
+                }
+
+                // rule 3 ec
+                if (file_target_commit.get(item) != null && file_current_commit.get(item) != null) {
+                }
+            }
+            // record result_sha1
+            file_result_sha1.put(item, result_sha1);
+        }
+
+        // change the stage
+        for (String item : file_result_sha1.keySet()) {
+            String result_sha1 = file_result_sha1.get(item);
+            if (result_sha1 != null && !result_sha1.equals(file_current_commit.get(item))) {
+                stage.store_addtion(item, result_sha1);
+            }
+            if (result_sha1 == null && file_current_commit.get(item) != null) {
+                stage.store_removal(item, file_current_commit.get(item));
+            }
+        }
+        // write stage
+        writeObject(STAGE_FILE, stage);
+
+        // commit
+        Repository.commit("Merged " + branch_name + " into " + head_branch + ".");
     }
 }
