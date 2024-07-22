@@ -103,7 +103,7 @@ public class Repository {
         // if key:value equal to current commit version
         // Yes:do not stage and remove
         Map temp_map = commit.get_file_map();
-        if (temp_map.containsKey(file_name) && temp_map.get(file_name) == file_sha1) {
+        if (temp_map.containsKey(file_name) && temp_map.get(file_name).equals(file_sha1)) {
             stage.remove_addtion(file_name);
         }
 
