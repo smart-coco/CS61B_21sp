@@ -113,12 +113,14 @@ public class Repository {
 
     // commit
     public static void commit(String message) {
-        // get commit class
-        // String active_commit = readContentsAsString(HEAD_FILE);
-        // Commit commit = readObject(join(COMMIT_DIR, active_commit), Commit.class);
-
         // get stage class
         Stage stage = readObject(STAGE_FILE, Stage.class);
+
+        // message is blank?
+        if (message.equals("")) {
+            System.out.println("Please enter a commit message.");
+            return;
+        }
 
         // stage is empty?
         if (stage.get_addtion().size() == 0 && stage.get_removal().size() == 0) {
@@ -167,9 +169,8 @@ public class Repository {
         if (commit.get_file_map().containsKey(file_name)) {
             // get file sha1
             File file_path = join(CWD, file_name);
-            String sha1_current = sha1(readContents(file_path));
             // add to removal of stage
-            stage.store_removal(file_name, sha1_current);
+            stage.store_removal(file_name, null);
             // if file in active_commit sha1 == current file,remove it from work directory
             if (file_path.exists()) {
                 file_path.delete();
@@ -211,7 +212,7 @@ public class Repository {
             Commit commit = readObject(join(COMMIT_DIR, commit_sha1), Commit.class);
             System.out.println("===");
             System.out.println("commit" + " " + commit_sha1);
-            System.out.println("Date" + " " + commit.get_timestamp());
+            System.out.println("Date:" + " " + commit.get_timestamp());
             System.out.println(commit.get_message());
             System.out.println();
         }
@@ -306,7 +307,7 @@ public class Repository {
         // Not staged for removal, but tracked in the current commit and deleted from
         // the working directory.
         for (String item : commit.get_file_map().keySet()) {
-            if (stage.get_removal().get(item) == null && !join(CWD, item).exists()) {
+            if (!stage.get_removal().containsKey(item) && !join(CWD, item).exists()) {
                 System.out.println(item);
             }
         }
@@ -627,7 +628,7 @@ public class Repository {
                 stage.store_addtion(item, result_sha1);
             }
             if (result_sha1 == null && file_current_commit.get(item) != null) {
-                stage.store_removal(item, file_current_commit.get(item));
+                stage.store_removal(item, null);
             }
         }
         // write stage
