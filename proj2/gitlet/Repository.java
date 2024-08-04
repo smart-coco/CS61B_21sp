@@ -139,6 +139,7 @@ public class Repository {
         writeObject(join(COMMIT_DIR, new_commit.get_sha1()), new_commit);
 
         // restore stage
+        writeContents(join(BRANCH_DIR, head_branch), new_commit.get_sha1());
         writeObject(STAGE_FILE, new Stage());
     }
 
@@ -223,12 +224,17 @@ public class Repository {
         // get list of commit
         List<String> commit_list = plainFilenamesIn(COMMIT_DIR);
 
+        boolean find_flag = false;
         // iterate and print out
         for (String commit_sha1 : commit_list) {
             Commit commit = readObject(join(COMMIT_DIR, commit_sha1), Commit.class);
             if (commit.get_message().equals(message)) {
                 System.out.println(commit_sha1);
+                find_flag = true;
             }
+        }
+        if (find_flag == false) {
+            System.out.println("Found no commit with that message.");
         }
     }
 
@@ -329,7 +335,55 @@ public class Repository {
 
     // checkout 1
     public static void checkout(String branch_name) {
+        // get current branch
+        String head_branch = readContentsAsString(HEAD_FILE);
+        String head_commit = readContentsAsString(join(BRANCH_DIR, head_branch));
+        Commit commit = readObject(join(COMMIT_DIR, head_commit), Commit.class);
 
+        // failure case
+        // If no branch with that name exists
+        if (!join(BRANCH_DIR, branch_name).exists()) {
+            System.out.println("No such branch exists.");
+            return;
+        }
+        // If that branch is the current branch
+        if (head_branch.equals(branch_name)) {
+            System.out.println("No need to checkout the current branch.");
+            return;
+        }
+        // If a working file is untracked in the current branch and would be
+        // overwritten by the checkout
+        // get target branch
+        String target_commit_name = readContentsAsString(join(BRANCH_DIR, branch_name));
+        Commit target_commit = readObject(join(COMMIT_DIR, target_commit_name), Commit.class);
+        // iterate current CWD and compare with target branch file
+        List<String> cwd_file_list = plainFilenamesIn(CWD);
+        for (String item : cwd_file_list) {
+            String file_sha1 = sha1(readContents(join(CWD, item)));
+            if (!commit.get_file_map().containsKey(item) && target_commit.get_file_map().containsKey(item)
+                    && !target_commit.get_file_map().get(item).equals(file_sha1)) {
+                System.out.println("There is an untracked file in the way; delete it, or add and commit it first.");
+                return;
+            }
+        }
+
+        // Ask all files in the commit at the head of the given branch, and puts
+        // them in the working directory, overwriting the versions of the files that are
+        // already there if they exist.
+        for (String item : target_commit.get_file_map().keySet()) {
+            checkout(target_commit_name, "---", item);
+        }
+
+        // Any files that are tracked in the current branch but are not present in
+        // the checked-out branch are deleted.
+        for (String item : cwd_file_list) {
+            if (commit.get_file_map().containsKey(item) && !target_commit.get_file_map().containsKey(item)) {
+                join(CWD, item).delete();
+            }
+        }
+
+        // set the head branch
+        writeContents(HEAD_FILE, branch_name);
     }
 
     // checkout 2
@@ -341,6 +395,7 @@ public class Repository {
 
         // if not contain file_name return
         if (!commit.get_file_map().containsKey(file_name)) {
+            System.out.println("File does not exist in that commit.");
             return;
         }
 
@@ -357,11 +412,17 @@ public class Repository {
 
     // checkout 3
     public static void checkout(String commit_sha1, String label, String file_name) {
+        // If no commit with that name exists
+        if (!join(COMMIT_DIR, commit_sha1).exists()) {
+            System.out.println("No commit with that id exists.");
+            return;
+        }
         // get commit class
         Commit commit = readObject(join(COMMIT_DIR, commit_sha1), Commit.class);
 
         // if not contain file_name return
         if (!commit.get_file_map().containsKey(file_name)) {
+            System.out.println("File does not exist in that commit.");
             return;
         }
 
