@@ -497,7 +497,7 @@ public class Repository {
             if (!head_commit.get_file_map().containsKey(item) && target_commit.get_file_map().containsKey(item)) {
                 String current_file_sha1 = sha1(readContents(join(CWD, item)));
                 String target_file_sha1 = target_commit.get_file_map().get(item);
-                if (current_file_sha1.equals(target_file_sha1)) {
+                if (!current_file_sha1.equals(target_file_sha1)) {
                     System.out.println("There is an untracked file in the way; delete it, or add and commit it first.");
                     return;
                 }
