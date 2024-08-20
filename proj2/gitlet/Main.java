@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
         // If args is empty?
         if (args.length == 0) {
-            System.out.println("Need argument");
+            System.out.println("Please enter a command.");
             return;
         }
         String firstArg = args[0];
@@ -52,9 +52,17 @@ public class Main {
                     Repository.checkout(args[1]);
                 }
                 if (args.length == 3) {
+                    if (!args[1].equals("--")) {
+                        System.out.println("Incorrect operands.");
+                        return;
+                    }
                     Repository.checkout(args[1], args[2]);
                 }
                 if (args.length == 4) {
+                    if (!args[2].equals("--")) {
+                        System.out.println("Incorrect operands.");
+                        return;
+                    }
                     Repository.checkout(args[1], args[2], args[3]);
                 }
                 break;
@@ -72,7 +80,7 @@ public class Main {
                 break;
             default:
                 System.out.println(
-                        "Need operation:init/add/commit/rm/log/global-log/find/status/checkout/branch/rm-branch/reset/merge");
+                        "No command with that name exists.");
         }
     }
 }
