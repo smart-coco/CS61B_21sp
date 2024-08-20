@@ -506,7 +506,7 @@ public class Repository {
 
         // Checks out all the files tracked by the given commit
         for (String item : target_commit.get_file_map().keySet()) {
-            Repository.checkout(head_commit_sha1, "--", item);
+            Repository.checkout(commit_sha1, "--", item);
         }
 
         // Removes tracked files that are not present in that commit
