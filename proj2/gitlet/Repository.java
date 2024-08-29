@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.List;
 import java.util.Set;
+
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -333,6 +334,19 @@ public class Repository {
         System.out.println();
     }
 
+    public static String short_to_long(String commit_sha1) {
+        // get current file list
+        List<String> commit_list = plainFilenamesIn(COMMIT_DIR);
+
+        for (String item : commit_list) {
+            boolean isPrefix = item.startsWith(commit_sha1);
+            if (isPrefix) {
+                return item;
+            }
+        }
+        return commit_sha1;
+    }
+
     // checkout 1
     public static void checkout(String branch_name) {
         // get current branch
@@ -411,7 +425,8 @@ public class Repository {
     }
 
     // checkout 3
-    public static void checkout(String commit_sha1, String label, String file_name) {
+    public static void checkout(String commit_sha1_in, String label, String file_name) {
+        String commit_sha1 = short_to_long(commit_sha1_in);
         // If no commit with that name exists
         if (!join(COMMIT_DIR, commit_sha1).exists()) {
             System.out.println("No commit with that id exists.");
