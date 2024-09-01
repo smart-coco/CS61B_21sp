@@ -19,7 +19,7 @@ public class Main {
         }
         String firstArg = args[0];
         // but is not in such a directory
-        if (!Utils.join(Repository.CWD, ".gitlet").exists()) {
+        if (!Utils.join(Repository.CWD, ".gitlet").exists() && !firstArg.equals("init")) {
             System.out.println("Not in an initialized Gitlet directory.");
             return;
         }
