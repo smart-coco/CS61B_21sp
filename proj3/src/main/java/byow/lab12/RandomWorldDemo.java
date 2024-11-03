@@ -13,11 +13,12 @@ public class RandomWorldDemo {
     private static final int WIDTH = 50;
     private static final int HEIGHT = 50;
 
-    private static final long SEED = 2873123;
+    private static final long SEED = 2873124;
     private static final Random RANDOM = new Random(SEED);
 
     /**
      * Fills the given 2D array of tiles with RANDOM tiles.
+     * 
      * @param tiles
      */
     public static void fillWithRandomTiles(TETile[][] tiles) {
@@ -30,17 +31,22 @@ public class RandomWorldDemo {
         }
     }
 
-    /** Picks a RANDOM tile with a 33% change of being
-     *  a wall, 33% chance of being a flower, and 33%
-     *  chance of being empty space.
+    /**
+     * Picks a RANDOM tile with a 33% change of being
+     * a wall, 33% chance of being a flower, and 33%
+     * chance of being empty space.
      */
     private static TETile randomTile() {
         int tileNum = RANDOM.nextInt(3);
         switch (tileNum) {
-            case 0: return Tileset.WALL;
-            case 1: return Tileset.FLOWER;
-            case 2: return Tileset.NOTHING;
-            default: return Tileset.NOTHING;
+            case 0:
+                return Tileset.WALL;
+            case 1:
+                return Tileset.FLOWER;
+            case 2:
+                return Tileset.NOTHING;
+            default:
+                return Tileset.NOTHING;
         }
     }
 
@@ -53,6 +59,5 @@ public class RandomWorldDemo {
 
         ter.renderFrame(randomTiles);
     }
-
 
 }
