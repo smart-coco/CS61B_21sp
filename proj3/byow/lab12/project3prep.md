@@ -20,6 +20,7 @@ Think back to the lab and the process used to eventually get to tessellating hex
 Answer:
 
 ccc
+
 **What distinguishes a hallway from a room? How are they similar?**
 
 Answer:
